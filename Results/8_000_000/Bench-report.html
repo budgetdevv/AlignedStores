@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>Bench-20220823-040025</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.13.1, OS=Windows 10.0.22000
+Intel Core i7-8700K CPU 3.70GHz (Coffee Lake), 1 CPU, 12 logical and 6 physical cores
+.NET SDK=7.0.100-rc.1.22416.2
+  [Host]     : .NET 7.0.0 (7.0.22.41112), X64 RyuJIT
+  DefaultJob : .NET 7.0.0 (7.0.22.41112), X64 RyuJIT
+</code></pre>
+<pre><code></code></pre>
+
+<table>
+<thead><tr><th> Method</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Code Size</th>
+</tr>
+</thead><tbody><tr><td>AlignedDest</td><td>560.5 &mu;s</td><td>2.86 &mu;s</td><td>2.39 &mu;s</td><td>58 B</td>
+</tr><tr><td>UnalignedDest</td><td>583.9 &mu;s</td><td>3.04 &mu;s</td><td>2.84 &mu;s</td><td>58 B</td>
+</tr></tbody></table>
+</body>
+</html>

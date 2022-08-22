@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>DisassemblyDiagnoser Output Bench-20220823-040025</title>
+
+<style type="text/css">
+    table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+    td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: left; }
+    tr { background-color: #fff; border-top: 1px solid #ccc; }
+    tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<table>
+<thead>
+<tr><th colspan="2">Bench-20220823-040025</th></tr>
+<tr>
+<th>AlignedDest .NET 7.0.0 (7.0.22.41112), X64 RyuJIT</th>
+<th>UnalignedDest .NET 7.0.0 (7.0.22.41112), X64 RyuJIT</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="vertical-align:top;"><pre><code>
+Bench.AlignedDest()
+vzeroupper
+mov       rax,2B7EC56E080
+mov       rdx,2B7ECD2E080
+vmovdqa   ymm0,ymmword ptr [rax]
+vmovdqa   ymmword ptr [rdx],ymm0
+add       rdx,20
+add       rax,20
+mov       rcx,2B7ED4CF280
+cmp       rdx,rcx
+jne       short 00007FFE34AA3437
+vzeroupper
+ret
+
+</code></pre></td>
+<td style="vertical-align:top;"><pre><code>
+Bench.UnalignedDest()
+vzeroupper
+mov       rax,2DAC3754080
+mov       rdx,2DAC3F090A1
+vmovdqa   ymm0,ymmword ptr [rax]
+vmovdqu   ymmword ptr [rdx],ymm0
+add       rdx,20
+add       rax,20
+mov       rcx,2DAC46AA2A1
+cmp       rdx,rcx
+jne       short 00007FFE34AD3437
+vzeroupper
+ret
+
+</code></pre></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

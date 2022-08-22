@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!-- saved from url=(0153)file:///C:/Users/Administrator/Desktop/BenchmarkTemplate/AlignedStores/bin/Release/net7.0/BenchmarkDotNet.Artifacts/results/Bench-disassembly-report.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>DisassemblyDiagnoser Output Bench-20220823-034725</title>
+
+<style type="text/css">
+    table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+    td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: left; }
+    tr { background-color: #fff; border-top: 1px solid #ccc; }
+    tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<table>
+<thead>
+<tr><th colspan="2">Bench-20220823-034725</th></tr>
+<tr>
+<th>AlignedDest .NET 7.0.0 (7.0.22.41112), X64 RyuJIT</th>
+<th>UnalignedDest .NET 7.0.0 (7.0.22.41112), X64 RyuJIT</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="vertical-align:top;"><pre><code>
+Bench.AlignedDest()
+vzeroupper
+mov       rax,23E7B869080
+mov       rdx,23E7D6FA080
+vmovdqa   ymm0,ymmword ptr [rax]
+vmovdqa   ymmword ptr [rdx],ymm0
+add       rdx,20
+add       rax,20
+mov       rcx,23E7F57E880
+cmp       rdx,rcx
+jne       short 00007FFE34AC3437
+vzeroupper
+ret
+
+</code></pre></td>
+<td style="vertical-align:top;"><pre><code>
+Bench.UnalignedDest()
+vzeroupper
+mov       rax,1960CF38080
+mov       rdx,1960EDC20A3
+vmovdqa   ymm0,ymmword ptr [rax]
+vmovdqu   ymmword ptr [rdx],ymm0
+add       rdx,20
+add       rax,20
+mov       rcx,19610C468A3
+cmp       rdx,rcx
+jne       short 00007FFE34AB3437
+vzeroupper
+ret
+
+</code></pre></td>
+</tr>
+</tbody>
+</table>
+
+
+</body></html>
