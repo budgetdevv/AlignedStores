@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics;
@@ -23,11 +24,11 @@ public unsafe class Bench
 
     static Bench()
     {
-        ActualSize = Size * Vector256<byte>.Count;
+        ActualSize = Size * Vector<byte>.Count;
         
         Source = (byte*) NativeMemory.AlignedAlloc((UIntPtr) ActualSize, (UIntPtr) 64);
         
-        Dest = (byte*) NativeMemory.AlignedAlloc((UIntPtr) (ActualSize + Vector256<byte>.Count), (UIntPtr) 64);
+        Dest = (byte*) NativeMemory.AlignedAlloc((UIntPtr) (ActualSize + Vector<byte>.Count), (UIntPtr) 64);
         
         DestUnaligned = Dest + 33; //Purposely misalign Dest
     }
@@ -40,12 +41,41 @@ public unsafe class Bench
         var CurrentDest = DestUnaligned;
 
         var LastDestOffsetByOne = CurrentDest + ActualSize;
-
-        for (; CurrentDest != LastDestOffsetByOne
-             ; CurrentDest += Vector256<byte>.Count
-             , CurrentSource += Vector256<byte>.Count)
+        
+        if (Vector256.IsHardwareAccelerated)
         {
-            Vector256.LoadAligned(CurrentSource).Store(CurrentDest);
+            for (; CurrentDest != LastDestOffsetByOne
+                 ; CurrentDest += Vector256<byte>.Count
+                 , CurrentSource += Vector256<byte>.Count)
+            {
+                Vector256.LoadAligned(CurrentSource).Store(CurrentDest);
+            }
+        }
+        
+        else if (Vector128.IsHardwareAccelerated)
+        {
+            
+            for (; CurrentDest != LastDestOffsetByOne
+                 ; CurrentDest += Vector128<byte>.Count
+                 , CurrentSource += Vector128<byte>.Count)
+            {
+                Vector128.LoadAligned(CurrentSource).Store(CurrentDest);
+            }
+        }
+        
+        else if (Vector64.IsHardwareAccelerated)
+        {
+            for (; CurrentDest != LastDestOffsetByOne
+                 ; CurrentDest += Vector64<byte>.Count
+                 , CurrentSource += Vector64<byte>.Count)
+            {
+                Vector64.LoadAligned(CurrentSource).Store(CurrentDest);
+            }
+        }
+
+        else
+        {
+            YourHardwareSucks();
         }
     }
     
@@ -58,11 +88,45 @@ public unsafe class Bench
 
         var LastDestOffsetByOne = CurrentDest + ActualSize;
 
-        for (; CurrentDest != LastDestOffsetByOne
-             ; CurrentDest += Vector256<byte>.Count
-             , CurrentSource += Vector256<byte>.Count)
+        if (Vector256.IsHardwareAccelerated)
         {
-            Vector256.LoadAligned(CurrentSource).StoreAligned(CurrentDest);
+            for (; CurrentDest != LastDestOffsetByOne
+                 ; CurrentDest += Vector256<byte>.Count
+                 , CurrentSource += Vector256<byte>.Count)
+            {
+                Vector256.LoadAligned(CurrentSource).StoreAligned(CurrentDest);
+            }
         }
+        
+        else if (Vector128.IsHardwareAccelerated)
+        {
+            
+            for (; CurrentDest != LastDestOffsetByOne
+                 ; CurrentDest += Vector128<byte>.Count
+                 , CurrentSource += Vector128<byte>.Count)
+            {
+                Vector128.LoadAligned(CurrentSource).StoreAligned(CurrentDest);
+            }
+        }
+        
+        else if (Vector64.IsHardwareAccelerated)
+        {
+            for (; CurrentDest != LastDestOffsetByOne
+                 ; CurrentDest += Vector64<byte>.Count
+                 , CurrentSource += Vector64<byte>.Count)
+            {
+                Vector64.LoadAligned(CurrentSource).StoreAligned(CurrentDest);
+            }
+        }
+
+        else
+        {
+            YourHardwareSucks();
+        }
+    }
+
+    private static void YourHardwareSucks()
+    {
+        throw new Exception("Your hardware sucks!");
     }
 }
